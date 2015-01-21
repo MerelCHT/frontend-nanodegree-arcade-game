@@ -92,10 +92,13 @@ var Engine = (function(global) {
     
     function checkCollisions() {
         allEnemies.forEach(function(enemy) {
+            //If a player collides/gets hit by an enemy he/she is put back in the starting postion.
+            //Moreover, the player's lives are updated (substracted by 1).
+            //In case the player has already lost all of his/her 3 lives the gameover image will appear. 
             if (enemy.y == player.y-10 && (Math.abs(player.x - enemy.x) < 3)){
                 player.hp.update();
-                 player.x = 202;
-                 player.y = 83*4-10;
+                player.x = 202;
+                player.y = 83*4-10;
                 console.log(player.hp.value);
                 if (player.hp.value <= 0){
                     gameOver();
@@ -183,14 +186,14 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
 
-    // Game over
+    //Game over
     function gameOver() {
         document.getElementById('game-over').style.display = 'block';
         document.getElementById('game-over-overlay').style.display = 'block';
         isGameOver = true;
     }
 
-    // Reset game to original state
+    //Reset game to original state
     function reset() {
         document.getElementById('game-over').style.display = 'none';
         document.getElementById('game-over-overlay').style.display = 'none';

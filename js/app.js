@@ -39,7 +39,8 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-
+//Checks whether the player is still within the bounds of the game canvas. If not, the player is put back
+//to his/her starting position. 
 Player.prototype.update = function() {
     if (this.x < 0 || this.x > 404 || this.y > 83*5 || this.y < 73 )  {
         console.log("out of bounds!");
@@ -66,13 +67,14 @@ Player.prototype.handleInput = function(direction) {
     }
 }
 
+//The number of lives a player has is initiliased to 3. 
 var Lives = function(){
     this.sprite = 'images/Heart.png';
     this.value = 3;
 }
 
+//The 3 lives the player has are drawn in a black box as 3 hearts. 
 Lives.prototype.render = function() {
-  //ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, 150, 45);
   for (var x = 0, i = 0; i < this.value; i++)
   {
@@ -81,6 +83,7 @@ Lives.prototype.render = function() {
   }
 }
 
+//Whenever a player gets hit by an enemy, he/she loses 1 live. 
 Lives.prototype.update = function(){
         this.value -= 1;
 }
