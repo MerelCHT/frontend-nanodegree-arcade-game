@@ -25,7 +25,7 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime;
 
-    canvas.width = 505;
+    canvas.width = 606;
     canvas.height = 606;
     doc.body.appendChild(canvas);
 
@@ -64,7 +64,9 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
+        document.getElementById('play-again').addEventListener('click', function() {
         reset();
+    });
         lastTime = Date.now();
         main();
     }
@@ -78,9 +80,28 @@ var Engine = (function(global) {
      * functionality this way (you could just implement collision detection
      * on the entities themselves within your app.js file).
      */
-    function update(dt) {
+     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
+        if ( allEnemies.length > 0 && allEnemies[allEnemies.length-1].x > 550 )
+            allEnemies.pop();
+        if ( Math.random() < 0.01 &&  allEnemies.length < 3 )
+            allEnemies.push(new Enemy());
+            
+    }
+    
+    function checkCollisions() {
+        allEnemies.forEach(function(enemy) {
+            if (enemy.y == player.y-10 && (Math.abs(player.x - enemy.x) < 3)){
+                player.hp.update();
+                 player.x = 202;
+                 player.y = 83*4-10;
+                console.log(player.hp.value);
+                if (player.hp.value <= 0){
+                    gameOver();
+                }
+            }
+        });
     }
 
     /* This is called by the update function  and loops through all of the
@@ -116,7 +137,7 @@ var Engine = (function(global) {
                 'images/grass-block.png'    // Row 2 of 2 of grass
             ],
             numRows = 6,
-            numCols = 5,
+            numCols = 6,
             row, col;
 
         /* Loop through the number of rows and columns we've defined above
@@ -153,15 +174,33 @@ var Engine = (function(global) {
         });
 
         player.render();
+        player.hp.render();
+        
     }
 
     /* This function does nothing but it could have been a good place to
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
      */
-    function reset() {
-        // noop
+
+    // Game over
+    function gameOver() {
+        document.getElementById('game-over').style.display = 'block';
+        document.getElementById('game-over-overlay').style.display = 'block';
+        isGameOver = true;
     }
+
+    // Reset game to original state
+    function reset() {
+        document.getElementById('game-over').style.display = 'none';
+        document.getElementById('game-over-overlay').style.display = 'none';
+        isGameOver = false;
+
+        allEnemies = new Array();
+
+        player = new Player();
+        console.log(player.hp.value);
+    };
 
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
@@ -172,7 +211,9 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-princess-girl.png',
+        'images/Heart.png',
+        'images/gameover.png'
     ]);
     Resources.onReady(init);
 
