@@ -33,6 +33,7 @@ var Engine = (function(global) {
      * and handles properly calling the update and render methods.
      */
     function main() {
+
         /* Get our time delta information which is required if your game
          * requires smooth animation. Because everyone's computer processes
          * instructions at different speeds we need a constant value that
@@ -218,7 +219,12 @@ var Engine = (function(global) {
         'images/Heart.png',
         'images/gameover.png'
     ]);
-    Resources.onReady(init);
+
+    //Ask the user whether he/she want to play at all. 
+    var play = prompt("do you want to play?");
+    if(play === "yes"){
+        Resources.onReady(init);
+    };
 
     /* Assign the canvas' context object to the global variable (the window
      * object when run in a browser) so that developer's can use it more easily
